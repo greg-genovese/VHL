@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { shallowRef } from 'vue'
-import AppHeader from './components/AppHeader.vue';
-import SoundWave from './components/SoundWave.vue';
-import IconButton from './components/IconButton.vue';
+import AppHeader from './components/molecules/AppHeader.vue';
+import SoundWave from './components/molecules/SoundWave.vue';
+import IconButton from './components/atoms/IconButton.vue';
 import IconPlay from './components/icons/IconPlay.vue';
 import IconStop from './components/icons/IconStop.vue';
 import IconRecord from './components/icons/IconRecord.vue';
-import AnswerForm from './components/AnswerForm.vue';
-import AppButton from './components/AppButton.vue';
+import AnswerForm from './components/organisms/AnswerForm.vue';
+import AppButton from './components/atoms/AppButton.vue';
 </script>
 
 <template>
