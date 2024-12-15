@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import AppButton from './AppButton.vue';
+</script>
+
 <template>
   <form @submit.prevent="submitForm">
     <label class="form-text-area-label form-label" for="answer">Freeform Answer</label>
@@ -16,7 +20,7 @@
         {{ option.label }}
       </label>
     </fieldset>
-    <button class="form-button" type="submit" :disabled="!selectedOption || selectedOption === 'false' || !answer">Submit</button>
+    <AppButton :onClick="submitForm" label="Submit" :disabled="!selectedOption || selectedOption === 'false' || !answer" type="submit"></AppButton>
   </form>
 </template>
 
@@ -24,6 +28,7 @@
 export default {
   props: {
     focusTextArea: Boolean,
+    handleRecordingSubmited: Function
   },
   data() {
     return {
@@ -61,6 +66,9 @@ export default {
   methods: {
     submitForm() {
       console.log('Form submitted with:', this.selectedOption, this.answer);
+      if(this.handleRecordingSubmited) {
+        this.handleRecordingSubmited();
+      }
     },
     validateForm() {
       if(this.answer) {
@@ -107,25 +115,5 @@ export default {
   border: 0;
   margin: var(--element-gap) 0;
   padding: 0;
-}
-.form-button {
-  background-color: var(--color-primary);
-  border: none;
-  border-radius: 5px;
-  color: var(--color-black);
-  font-weight: bold;
-  font-size: 1.5em;
-  padding: calc(var(--base-unit) * 2);
-  width: 100%;
-  -webkit-transition: background-color 500ms linear;
-  -ms-transition: background-color 500ms linear;
-  transition: background-color 500ms linear;
-  &:hover {
-    background-color: var(--color-primary-bright);
-  }
-  &:disabled {
-    background-color: var(--color-grey);
-    color: var(--color-text);
-  }
 }
 </style>

@@ -7,27 +7,30 @@ import IconPlay from './components/icons/IconPlay.vue';
 import IconStop from './components/icons/IconStop.vue';
 import IconRecord from './components/icons/IconRecord.vue';
 import AnswerForm from './components/AnswerForm.vue';
+import AppButton from './components/AppButton.vue';
 </script>
 
 <template>
   <AppHeader></AppHeader>
 
   <main>
-    <SoundWave :active="recordingActive" />
-    <h1>Say the vocabulary words</h1>
-    <div class="button-container">
-    <IconButton
-      @click="handleClick(button.label)"
-      v-for="button in buttons"
-      :key="button.label"
-      :color="button.color"
-      :label="button.label">
-      <template #icon>
-        <component :is="button.icon"/>
-      </template>
-    </IconButton>
+    <div class="secondary-content" v-if="recordingSubmited">
+      <h1>Thanks for your answer!</h1>
+      <AppButton :onClick="handleRecordingSubmited" label="Resubmit" :disabled="false"></AppButton>
     </div>
-    <AnswerForm :focusTextArea="focusTextArea"></AnswerForm>
+    <div v-else="recordingSubmited">
+      <SoundWave :active="recordingActive" />
+      <h1>Say the vocabulary words</h1>
+      <div class="button-container">
+        <IconButton @click="handleClick(button.label)" v-for="button in buttons" :key="button.label"
+          :color="button.color" :label="button.label">
+          <template #icon>
+            <component :is="button.icon" />
+          </template>
+        </IconButton>
+      </div>
+      <AnswerForm :focusTextArea="focusTextArea" :handleRecordingSubmited="handleRecordingSubmited"></AnswerForm>
+    </div>
   </main>
 </template>
 
@@ -40,38 +43,47 @@ enum ButtonLabels {
 export default {
   data() {
     return {
+      recordingSubmited: false,
       recordingActive: false,
       focusTextArea: false,
       buttons: [
-        { label: ButtonLabels.STOP, color: 'hsla(207, 90%, 54%, 1)', icon: shallowRef(IconStop)},
-        { label: ButtonLabels.RECORD, color: 'hsla(4, 90%, 58%, 1)', icon: shallowRef(IconRecord)},
-        { label: ButtonLabels.PLAY, color: 'hsla(160, 100%, 37%, 1)', icon: shallowRef(IconPlay)},
+        { label: ButtonLabels.STOP, color: 'hsla(207, 90%, 54%, 1)', icon: shallowRef(IconStop) },
+        { label: ButtonLabels.RECORD, color: 'hsla(4, 90%, 58%, 1)', icon: shallowRef(IconRecord) },
+        { label: ButtonLabels.PLAY, color: 'hsla(160, 100%, 37%, 1)', icon: shallowRef(IconPlay) },
       ]
     };
   },
   methods: {
-    handleClick(label:string) {
-      if(this.recordingActive && label === ButtonLabels.STOP) {
-        console.log('FOCUS');
+    handleClick(label: string) {
+      if (this.recordingActive && label === ButtonLabels.STOP) {
         this.focusTextArea = true;
       } else {
         this.focusTextArea = false;
       }
-      if(label === ButtonLabels.RECORD || label === ButtonLabels.PLAY) {
+      if (label === ButtonLabels.RECORD || label === ButtonLabels.PLAY) {
         this.recordingActive = true
       }
-      if(label === ButtonLabels.STOP) {
+      if (label === ButtonLabels.STOP) {
         this.recordingActive = false
       }
+    },
+    handleRecordingSubmited() {
+      this.recordingSubmited = !this.recordingSubmited;
     }
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 h1 {
   color: var(--color-text);
   text-align: center;
+}
+
+.secondary-content {
+  h1 {
+    margin-bottom: var(--element-gap)
+  }
 }
 
 .button-container {
@@ -82,8 +94,8 @@ h1 {
 }
 
 @media (min-width: 351px) {
-.button-container {
-  flex-direction: row;
-}
+  .button-container {
+    flex-direction: row;
+  }
 }
 </style>
